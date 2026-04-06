@@ -1,0 +1,34 @@
+---
+title: Mi Documentación
+description: Centro de documentación para clases universitarias y proyectos de desarrollo.
+template: splash
+hero:
+  tagline: Organiza tus notas de clase y documenta tus proyectos de desarrollo en un solo lugar.
+  actions:
+    - text: Ver Clases
+      link: /clases/introduccion/
+      icon: right-arrow
+      variant: primary
+    - text: Ver Proyectos
+      link: /proyectos/introduccion/
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## ¿Qué encontrarás aquí?
+
+<CardGrid stagger>
+  <Card title="Clases Universitarias" icon="open-book">
+    Notas organizadas por materia: Programación, Bases de Datos y más. Todo en formato fácil de consultar.
+  </Card>
+  <Card title="Proyectos Personales" icon="setting">
+    Documentación técnica de tus proyectos: arquitectura, decisiones de diseño y guías de uso.
+  </Card>
+  <Card title="Búsqueda Rápida" icon="magnifier">
+    Usa `Ctrl+K` para buscar cualquier tema al instante en toda la documentación.
+  </Card>
+  <Card title="Tema Oscuro / Claro" icon="sun">
+    Cambia entre modo oscuro y claro según tu preferencia. Perfecto para estudiar de noche.
+  </Card>
+</CardGrid>

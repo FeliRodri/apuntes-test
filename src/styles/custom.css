@@ -1,0 +1,250 @@
+/* ========================================
+   Tema Oscuro Profesional — Estilo Z.AI Docs
+   ======================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ══════════════════════════════
+   VARIABLES MODO OSCURO (DEFAULT)
+   ══════════════════════════════ */
+:root,
+:root[data-theme='dark'] {
+  --sl-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --sl-font-system-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Fondos principales */
+  --sl-color-bg: #0d1117;
+  --sl-color-bg-nav: rgba(11, 15, 20, 0.85);
+  --sl-color-bg-sidebar: #0b0f14;
+  --sl-color-bg-inline-code: #1c2432;
+
+  /* Texto */
+  --sl-color-text: #c9d1d9;
+  --sl-color-text-accent: #2dd4a8;
+  --sl-color-text-invert: #000000;
+  --sl-color-text-muted: #7d8590;
+
+  /* Bordes */
+  --sl-color-hairline: #1e2a3a;
+  --sl-color-hairline-shade: #2d3748;
+
+  /* Acentos (Teal/Esmeralda) */
+  --sl-color-accent-low: rgba(45, 212, 168, 0.1);
+  --sl-color-accent: #2dd4a8;
+  --sl-color-accent-high: #7ef5d5;
+
+  /* Variables custom */
+  --doc-heading: #e6edf3;
+  --doc-link: #58a6ff;
+  --doc-accent-dim: rgba(45, 212, 168, 0.2);
+}
+
+/* ══════════════════════════════
+   VARIABLES MODO CLARO
+   ══════════════════════════════ */
+:root[data-theme='light'] {
+  --sl-color-bg: #ffffff;
+  --sl-color-bg-nav: rgba(255, 255, 255, 0.85);
+  --sl-color-bg-sidebar: #f8f9fa;
+  --sl-color-bg-inline-code: #f1f3f5;
+
+  --sl-color-text: #24292f;
+  --sl-color-text-accent: #0f7652;
+  --sl-color-text-invert: #ffffff;
+  --sl-color-text-muted: #57606a;
+
+  --sl-color-hairline: #e3e8ee;
+  --sl-color-hairline-shade: #d0d7de;
+
+  --sl-color-accent-low: rgba(15, 118, 82, 0.1);
+  --sl-color-accent: #0f7652;
+  --sl-color-accent-high: #04422e;
+
+  --doc-heading: #000000;
+  --doc-link: #0969da;
+  --doc-accent-dim: rgba(15, 118, 82, 0.2);
+}
+
+/* ══════════════════════════════
+   BASE & NAVEGACIÓN
+   ══════════════════════════════ */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+header.header {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--sl-color-hairline);
+}
+
+nav.sidebar {
+  border-right: 1px solid var(--sl-color-hairline);
+}
+
+/* Sidebar items */
+nav.sidebar a,
+.sidebar-content a {
+  font-size: 0.875rem;
+  font-weight: 400;
+  border-radius: 6px;
+  padding: 0.35rem 0.75rem;
+  border-left: 2px solid transparent;
+  transition: color 0.1s ease, background 0.1s ease;
+}
+
+nav.sidebar a:hover,
+.sidebar-content a:hover {
+  background: var(--sl-color-accent-low);
+}
+
+/* Active sidebar item */
+nav.sidebar a[aria-current='page'],
+.sidebar-content a[aria-current='page'] {
+  color: var(--sl-color-text-accent) !important;
+  background: var(--sl-color-accent-low);
+  border-left: 2px solid var(--sl-color-accent);
+  font-weight: 500;
+}
+
+.sidebar-content .top-level > li > details > summary span,
+.sidebar-content .top-level > li > details > summary {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--sl-color-text);
+  letter-spacing: 0.01em;
+}
+
+/* ══════════════════════════════
+   CONTENIDO PRINCIPAL
+   ══════════════════════════════ */
+.sl-markdown-content {
+  line-height: 1.75;
+}
+
+.sl-markdown-content h1 {
+  font-weight: 700;
+  font-size: 2rem;
+  letter-spacing: -0.03em;
+  color: var(--doc-heading);
+}
+
+.sl-markdown-content h2 {
+  font-weight: 600;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  color: var(--doc-heading);
+  margin-top: 2.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--sl-color-hairline);
+}
+
+.sl-markdown-content h3 {
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: var(--doc-heading);
+}
+
+.sl-markdown-content a {
+  color: var(--doc-link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: opacity 0.15s ease;
+}
+
+.sl-markdown-content a:hover {
+  opacity: 0.8;
+}
+
+/* ══════════════════════════════
+   BLOQUES DE CÓDIGO & TABLAS
+   ══════════════════════════════ */
+.expressive-code,
+.expressive-code .frame {
+  border-radius: 8px !important;
+}
+
+.expressive-code pre {
+  font-size: 0.8125rem !important;
+  line-height: 1.65 !important;
+}
+
+.sl-markdown-content :not(pre) > code {
+  background: var(--sl-color-bg-inline-code);
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: 4px;
+  padding: 0.15em 0.4em;
+  font-size: 0.85em;
+  font-weight: 500;
+}
+
+.sl-markdown-content table {
+  border-spacing: 0;
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.sl-markdown-content th {
+  background: var(--sl-color-bg-inline-code);
+  font-weight: 600;
+  text-align: left;
+}
+
+.sl-markdown-content th,
+.sl-markdown-content td {
+  padding: 0.625rem 1rem;
+  border-bottom: 1px solid var(--sl-color-hairline);
+}
+
+.sl-markdown-content tr:last-child td {
+  border-bottom: none;
+}
+
+/* ══════════════════════════════
+   COMPONENTES
+   ══════════════════════════════ */
+.card {
+  border: 1px solid var(--sl-color-hairline) !important;
+  border-radius: 8px;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover {
+  border-color: var(--sl-color-accent) !important;
+  transform: translateY(-1px);
+}
+
+.starlight-aside {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 1rem 1.25rem;
+}
+
+.starlight-aside--note {
+  background: var(--sl-color-accent-low) !important;
+  border-color: var(--doc-accent-dim) !important;
+  border-left: 3px solid var(--sl-color-accent) !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--sl-color-hairline);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--sl-color-hairline-shade);
+}
