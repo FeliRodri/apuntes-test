@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import sys
+import os
+import shutil
 import argparse
 from pathlib import Path
 
@@ -54,7 +56,7 @@ def main():
     if ext == '.pdf':
         content = pdf.extract_text(input_path, args.output_path)
     elif ext == '.pptx':
-        content = pptx.extract_text(input_path)
+        content = pptx.extract_text(input_path, args.output_path)
     else:
         print(f"Error: Formato {ext} no soportado. Usa .pdf o .pptx.")
         sys.exit(1)
@@ -73,6 +75,29 @@ def main():
         f.write(md_content)
         
     print(f"✅ ¡Éxito! Archivo generado en: {output_file}")
+    
+    # --- SISTEMA DE CUARENTENA (POST-PURGE INTELIGENTE) ---
+    img_folder = base_docs_dir / args.output_path
+    if img_folder.exists() and img_folder.is_dir():
+        # Carpeta externa asilada fuera del ecosistema web para evitar peso innecesario
+        quarantine_base = Path(os.path.expanduser('~/Documentos/Apuntes_Revision/Diapositivas_Descartadas'))
+        quarantine_dir = quarantine_base / img_folder.name
+        
+        discarded_count = 0
+        for img_file in img_folder.glob("*.png"):
+            # Si el archivo exacto generado no figura en el cuerpo definitivo, IA lo rechazó
+            if img_file.name not in md_content:
+                if discarded_count == 0:
+                    quarantine_dir.mkdir(parents=True, exist_ok=True)
+                
+                # Mover el archivo (Evacuación)
+                shutil.move(str(img_file), str(quarantine_dir / img_file.name))
+                discarded_count += 1
+                
+        if discarded_count > 0:
+            print(f"🧹 Higiene del Proyecto: {discarded_count} diapositivas (sin gráficos clave) fueron descartadas del servidor web local.")
+            print(f"   -> Han sido evacuadas exitosamente a cuarentena en: {quarantine_dir}")
+
     print("Recuerda agregar el nuevo slug al archivo astro.config.mjs para que aparezca en el sidebar.")
 
 if __name__ == "__main__":

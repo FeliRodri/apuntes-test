@@ -1,6 +1,8 @@
 // @ts-check
 import starlight from '@astrojs/starlight';
 import { defineConfig } from 'astro/config';
+import rehypeKatex from 'rehype-katex';
+import remarkMath from 'remark-math';
 
 // https://astro.build/config
 export default defineConfig({
@@ -16,6 +18,13 @@ export default defineConfig({
 			],
 			customCss: ['./src/styles/custom.css'],
 			head: [
+				{
+					tag: 'link',
+					attrs: {
+						rel: 'stylesheet',
+						href: 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css',
+					},
+				},
 				{
 					tag: 'style',
 					content: `
@@ -57,10 +66,18 @@ export default defineConfig({
 								{ label: 'SQL Básico', slug: 'clases/bases-de-datos/sql-basico' },
 								{ label: 'Semántica', slug: 'clases/bases-de-datos/semantica' },
 								{ label: 'Fundamentos', slug: 'clases/bases-de-datos/fundamentos' },
+								{ label: 'Fundamentos-purge', slug: 'clases/bases-de-datos/fundamentos-purge' },
 								{ label: 'Fundamentos-Screenshots-pdf01', slug: 'clases/bases-de-datos/fundamentos002'},
 								{ label: 'Semantica-Imagenes-pdf02', slug: 'clases/bases-de-datos/semantica002'},
 								{ label: 'Diseño Top-Down-pdf03', slug: 'clases/bases-de-datos/diseño_top-down' },
 								{ label: 'Sistemas Administradores de Bases de Datos Relacionales-pdf04', slug: 'clases/bases-de-datos/sabdr' },
+							],
+						},
+						{
+							label: 'Estadistica Aplicada',
+							items: [
+								{ label: 'Introducción', slug: 'clases/estadistica-aplicada/introduccion' },
+								{ label: 'Correlación', slug: 'clases/estadistica-aplicada/correlacion' },
 							],
 						},
 					],
@@ -81,4 +98,8 @@ export default defineConfig({
 			],
 		}),
 	],
+	markdown: {
+		remarkPlugins: [remarkMath],
+		rehypePlugins: [rehypeKatex],
+	},
 });

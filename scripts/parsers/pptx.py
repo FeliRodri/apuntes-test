@@ -1,28 +1,59 @@
 import sys
+import os
+import shutil
+import subprocess
+import tempfile
+from pathlib import Path
 
-try:
-    import pptx
-except ImportError:
-    print("Falta la librería python-pptx. Por favor instala las dependencias:")
-    print("pip install python-pptx")
-    sys.exit(1)
+# Re-utilizamos el engine robusto de PDF
+from parsers import pdf
 
-def extract_text(filepath):
-    """Extrae texto diapositiva por diapositiva de un PPTX."""
-    text_content = []
-    try:
-        prs = pptx.Presentation(filepath)
-        for i, slide in enumerate(prs.slides):
-            slide_text = []
-            for shape in slide.shapes:
-                if hasattr(shape, "text") and shape.text.strip():
-                    slide_text.append(shape.text)
-            
-            if slide_text:
-                joined_text = "\n\n".join(slide_text)
-                text_content.append(f"## Diapositiva {i+1}\n\n{joined_text}")
-    except Exception as e:
-        print(f"Error leyendo PPTX: {e}")
+def extract_text(filepath, output_path):
+    """
+    Toma un archivo PPTX, lo renderiza silenciosamente a un PDF manteniendo 
+    todos los vectores gráficos (SmartArt, Charts, Shapes), y luego lo 
+    pasa por nuestro pipeline super-visual de pdf.py (PyMuPDF).
+    """
+    filepath = Path(filepath).resolve()
+    print(f"🔄 Convirtiendo presentación a Formato Vectorial (PDF) mediante LibreOffice...")
+    
+    # Validamos que libreoffice exista en el sistema
+    lo_bin = "libreoffice" if shutil.which("libreoffice") else "soffice"
+    if shutil.which(lo_bin) is None:
+        print("Error: Se necesita LibreOffice para renderizar presentaciones a PDF de forma nativa.")
+        print("En Ubuntu/Debian instala con: sudo apt install libreoffice")
         sys.exit(1)
         
-    return "\n\n".join(text_content)
+    # Crear un directorio temporal para el "PDF Fantasma"
+    with tempfile.TemporaryDirectory() as temp_dir:
+        # Comando para LibreOffice Headless
+        cmd = [
+            lo_bin,
+            "--headless",
+            "--convert-to", "pdf",
+            str(filepath),
+            "--outdir", temp_dir
+        ]
+        
+        try:
+            # Inhibimos el output estándar para no ensuciar la consola a menos que falle
+            subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        except subprocess.CalledProcessError:
+            print("Error: Falló la conversión de PPTX a PDF con LibreOffice.")
+            sys.exit(1)
+            
+        # Encontramos el archivo generado (mismo nombre base, pero extensión .pdf)
+        pdf_filename = filepath.stem + ".pdf"
+        pdf_path = Path(temp_dir) / pdf_filename
+        
+        if not pdf_path.exists():
+            print("Error: LibreOffice se ejecutó pero el PDF fantasma no apareció.")
+            sys.exit(1)
+            
+        print(f"📖 Renderizado completado. Delegando al motor de capturas de alta definición...")
+        
+        # Le delegamos toda esta maravilla a nuestro parseador robusto.
+        # pdf.py se encargará de hacer los png y generar el texto base.
+        content = pdf.extract_text(pdf_path, output_path)
+        
+    return content
