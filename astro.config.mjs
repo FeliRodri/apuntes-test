@@ -57,7 +57,8 @@ export default defineConfig({
 								{ label: 'SQL Básico', slug: 'clases/bases-de-datos/sql-basico' },
 								{ label: 'Semántica', slug: 'clases/bases-de-datos/semantica' },
 								{ label: 'Fundamentos', slug: 'clases/bases-de-datos/fundamentos' },
-								{ label: 'Fundamentos-Imagenes', slug: 'clases/bases-de-datos/fundamentostestimagenes' },
+								{ label: 'Fundamentos-Screenshots-pdf01', slug: 'clases/bases-de-datos/fundamentos002'},
+								{ label: 'Semantica-Imagenes-pdf02', slug: 'clases/bases-de-datos/semantica002'}
 							],
 						},
 					],

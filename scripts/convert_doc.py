@@ -52,7 +52,7 @@ def main():
     
     # Delegar responsabilidad de parseo al módulo correspondiente (Alta cohesión)
     if ext == '.pdf':
-        content = pdf.extract_text(input_path)
+        content = pdf.extract_text(input_path, args.output_path)
     elif ext == '.pptx':
         content = pptx.extract_text(input_path)
     else:

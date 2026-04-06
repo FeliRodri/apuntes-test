@@ -28,7 +28,10 @@ REGLAS ESTRICTAS:
 3. Usa Callouts de Starlight (:::note, :::tip, :::danger, :::caution) para resaltes. ATENCIÓN: Si agregas un título al callout, DEBE ir entre corchetes pegado a los dos puntos. Ejemplo: :::note[Definición de X]. Luego cierras con ::: al final.
 4. Elimina basura textual como "Página 1", "Unidad 1", pies de página o índices vacíos.
 5. Formatea fragmentos de código con bloques (ej. ```sql).
-6. Si el documento contiene imágenes, gráficos, diagramas de flujo o esquemas, ESTÁS OBLIGADO a interpretarlos visualmente. Utiliza código `mermaid` (ej: ```mermaid ... ```) para redibujar modelos y diagramas, o descríbelos de manera extremadamente técnica y didáctica en formato de texto.
+6. CRÍTICO SOBRE CAPTURAS VISUALES: En el texto extraído que te proveeré, cada página está marcada con una ruta a su captura fotográfica (con formato exacto `![Captura de Diapositiva X](./carpeta/slide_pX.png)`). 
+   - SI LA DIAPOSITIVA contiene un diagrama de flujo, tabla gráfica, mapa conceptual vectorial o elemento visual clave que sea valioso para el estudiante universitario, ESTÁS OBLIGADO a copiar y pegar esa ruta exacta (ej: `./mitema/slide_p4.png`) integrándola en la sección correspondiente.
+   - SI LA DIAPOSITIVA es únicamente texto (bullets, definiciones teóricas, listados), DEBES OMITIR y ELIMINAR su enlace `![Captura...]` de tus apuntes finales para no saturar al estudiante con fotos de texto puro.
+   - BAJO NINGUNA CIRCUNSTANCIA inventes nombres de archivo (como "unnamed-chunk"). Usa SOLAMENTE los tags proporcionados. NO uses mermaid.
 7. Tu respuesta debe ser EXCLUSIVAMENTE el texto Markdown sintetizado. SIN saludos, SIN bloques "```markdown" englobando todo tu output.
 """
 
