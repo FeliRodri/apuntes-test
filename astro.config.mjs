@@ -58,7 +58,9 @@ export default defineConfig({
 								{ label: 'Semántica', slug: 'clases/bases-de-datos/semantica' },
 								{ label: 'Fundamentos', slug: 'clases/bases-de-datos/fundamentos' },
 								{ label: 'Fundamentos-Screenshots-pdf01', slug: 'clases/bases-de-datos/fundamentos002'},
-								{ label: 'Semantica-Imagenes-pdf02', slug: 'clases/bases-de-datos/semantica002'}
+								{ label: 'Semantica-Imagenes-pdf02', slug: 'clases/bases-de-datos/semantica002'},
+								{ label: 'Diseño Top-Down-pdf03', slug: 'clases/bases-de-datos/diseño_top-down' },
+								{ label: 'Sistemas Administradores de Bases de Datos Relacionales-pdf04', slug: 'clases/bases-de-datos/sabdr' },
 							],
 						},
 					],

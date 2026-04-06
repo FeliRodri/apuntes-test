@@ -42,7 +42,19 @@ REGLAS ESTRICTAS:
     if filepath and str(filepath).lower().endswith('.pdf'):
         print("👁️  Inyectando PDF a Gemini Vision para análisis visual de diagramas y gráficos...")
         try:
-            uploaded_file = client.files.upload(file=str(filepath))
+            import tempfile
+            import shutil
+            
+            # Crear copia temporal con nombre ASCII puro para evitar errores de encoding en la API de Google
+            with tempfile.NamedTemporaryFile(suffix='.pdf', delete=False) as temp_pdf:
+                shutil.copy2(filepath, temp_pdf.name)
+                safe_filepath = temp_pdf.name
+                
+            uploaded_file = client.files.upload(file=safe_filepath)
+            
+            # Limpiar archivo temporal inmediatamente después de subirlo
+            os.remove(safe_filepath)
+            
             contents_to_generate.append(uploaded_file)
             print("👁️  Visión artificial activada. Leyendo texto y procesando imágenes...")
         except Exception as e:
@@ -52,10 +64,24 @@ REGLAS ESTRICTAS:
         contents_to_generate.append(f"Texto extraído a sintetizar:\n{raw_text}")
 
     try:
-        response = client.models.generate_content(
-            model='gemini-2.5-flash',
-            contents=contents_to_generate,
-        )
+        import time
+        max_retries = 4
+        response = None
+        
+        for attempt in range(max_retries):
+            try:
+                response = client.models.generate_content(
+                    model='gemini-3-flash',
+                    contents=contents_to_generate,
+                )
+                break # Éxito, salir del loop
+            except Exception as api_err:
+                if attempt == max_retries - 1:
+                    raise api_err # Lanzar finalmente si todos los intentos fallaron
+                
+                print(f"⚠️  Servidores de IA saturados (Intento {attempt+1}/{max_retries}). Reintentando en 5 segundos...")
+                time.sleep(5)
+                
         content = response.text.strip()
         # Limpiar si el LLM envuelve todo en un bloque markdown
         if content.startswith("```markdown"):
