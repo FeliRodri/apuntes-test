@@ -8,13 +8,13 @@ import remarkMath from 'remark-math';
 export default defineConfig({
 	integrations: [
 		starlight({
-			title: 'Mi Documentación',
+			title: 'Mis Apuntes',
 			defaultLocale: 'root',
 			locales: {
 				root: { label: 'Español', lang: 'es' },
 			},
 			social: [
-				{ icon: 'github', label: 'GitHub', href: 'https://github.com' },
+				{ icon: 'github', label: 'GitHub', href: 'https://github.com/FeliRodri/apuntes-test' },
 			],
 			customCss: ['./src/styles/custom.css'],
 			head: [

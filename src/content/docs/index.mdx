@@ -1,34 +1,40 @@
 ---
-title: Mi Documentación
-description: Centro de documentación para clases universitarias y proyectos de desarrollo.
+title: Mis Apuntes
+description: Centro de apuntes universitarios extraídos mediante Inteligencia Artificial (Gemini).
 template: splash
 hero:
-  tagline: Organiza tus notas de clase y documenta tus proyectos de desarrollo en un solo lugar.
+  tagline: Repositorio central de apuntes universitarios de grado profesional. Notas de clase sintetizadas y estructuradas matemáticamente mediante visión tridimensional e IA.
   actions:
-    - text: Ver Clases
-      link: /clases/introduccion/
+    - text: Estudiar Clases
+      link: /clases/
       icon: right-arrow
       variant: primary
-    - text: Ver Proyectos
-      link: /proyectos/introduccion/
+    - text: Visitar Código en GitHub
+      link: https://github.com/FeliRodri/apuntes-test
+      icon: github
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card, CardGrid } from "@astrojs/starlight/components";
 
-## ¿Qué encontrarás aquí?
+## Hub Académico Autónomo
 
-<CardGrid stagger>
-  <Card title="Clases Universitarias" icon="open-book">
-    Notas organizadas por materia: Programación, Bases de Datos y más. Todo en formato fácil de consultar.
+<CardGrid>
+  <Card title="Apuntes Extraídos por IA" icon="open-book">
+    Toda la teoría transcrita desde diapositivas PDF/PPTX utilizando **Gemini
+    2.5 Flash**, purificando redundancias y resguardando gráficos críticos.
   </Card>
-  <Card title="Proyectos Personales" icon="setting">
-    Documentación técnica de tus proyectos: arquitectura, decisiones de diseño y guías de uso.
+  <Card title="Precisión Matemática" icon="pencil">
+    Modelación avanzada de fórmulas estadísticas utilizando sintaxis **LaTeX** y
+    renderización web a través del motor estricto de KaTeX.
   </Card>
-  <Card title="Búsqueda Rápida" icon="magnifier">
-    Usa `Ctrl+K` para buscar cualquier tema al instante en toda la documentación.
+  <Card title="Entornos de BD Lógicos" icon="setting">
+    Ejercicios analíticos documentados meticulosamente bajo enfoques
+    universitarios como el **Modelo Top-Down** relacional (Caso de Estudio F1).
   </Card>
-  <Card title="Tema Oscuro / Claro" icon="sun">
-    Cambia entre modo oscuro y claro según tu preferencia. Perfecto para estudiar de noche.
+  <Card title="Zero-Maintenance" icon="rocket">
+    Sitio blindado con Starlight. Despreocúpate de construir menús; el
+    **Autogenerate Router** crea y clasifica el árbol de asignaturas
+    instantáneamente.
   </Card>
 </CardGrid>
