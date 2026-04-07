@@ -50,37 +50,7 @@ export default defineConfig({
 				},
 				{
 					label: 'Clases',
-					items: [
-						{ label: 'Introducción', slug: 'clases/introduccion' },
-						{
-							label: 'Programación',
-							items: [
-								{ label: 'Fundamentos', slug: 'clases/programacion/fundamentos' },
-								{ label: 'POO', slug: 'clases/programacion/poo' },
-							],
-						},
-						{
-							label: 'Bases de Datos',
-							items: [
-								{ label: 'Introducción', slug: 'clases/bases-de-datos/introduccion' },
-								{ label: 'SQL Básico', slug: 'clases/bases-de-datos/sql-basico' },
-								{ label: 'Semántica', slug: 'clases/bases-de-datos/semantica' },
-								{ label: 'Fundamentos', slug: 'clases/bases-de-datos/fundamentos' },
-								{ label: 'Fundamentos-purge', slug: 'clases/bases-de-datos/fundamentos-purge' },
-								{ label: 'Fundamentos-Screenshots-pdf01', slug: 'clases/bases-de-datos/fundamentos002'},
-								{ label: 'Semantica-Imagenes-pdf02', slug: 'clases/bases-de-datos/semantica002'},
-								{ label: 'Diseño Top-Down-pdf03', slug: 'clases/bases-de-datos/diseño_top-down' },
-								{ label: 'Sistemas Administradores de Bases de Datos Relacionales-pdf04', slug: 'clases/bases-de-datos/sabdr' },
-							],
-						},
-						{
-							label: 'Estadistica Aplicada',
-							items: [
-								{ label: 'Introducción', slug: 'clases/estadistica-aplicada/introduccion' },
-								{ label: 'Correlación', slug: 'clases/estadistica-aplicada/correlacion' },
-							],
-						},
-					],
+					autogenerate: { directory: 'clases' },
 				},
 				{
 					label: 'Proyectos',

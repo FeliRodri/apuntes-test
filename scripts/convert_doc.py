@@ -97,8 +97,7 @@ def main():
         if discarded_count > 0:
             print(f"🧹 Higiene del Proyecto: {discarded_count} diapositivas (sin gráficos clave) fueron descartadas del servidor web local.")
             print(f"   -> Han sido evacuadas exitosamente a cuarentena en: {quarantine_dir}")
-
-    print("Recuerda agregar el nuevo slug al archivo astro.config.mjs para que aparezca en el sidebar.")
+    print("✅ Índice lateral de Starlight actualizado automáticamente vía Autogenerate.")
 
 if __name__ == "__main__":
     main()

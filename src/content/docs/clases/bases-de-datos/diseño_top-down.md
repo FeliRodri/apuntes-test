@@ -50,6 +50,10 @@ Los pilotos firman contratos para correr durante una temporada en los autos de u
 Los automóviles deben estar inscritos en una escudería para poder participar. Estos son asignados a los pilotos para una carrera en particular, dependiendo si están disponibles técnicamente. Un piloto puede usar sólo un automóvil durante una carrera. La participación de un piloto en una carrera exige que se le tenga asignado un automóvil.
 
 En una temporada se realizan muchas carreras en circuitos existentes en los distintos países. En un mismo circuito pueden desarrollarse varias carreras (en una misma o distintas temporadas). Además, un circuito puede estar en reparaciones y no tener carreras programadas.
+
+> **📚 Soluciones Disponibles:**
+> - [Ver Análisis Lógico del Caso F1 (Estructura Básica)](/clases/bases-de-datos/top-down-f1)
+> - [Ver Resolución Paso a Paso (Lectura Detallada)](/clases/bases-de-datos/top-down-f1-detallado)
 :::
 
 ### Etapa 2: Diseño Conceptual
