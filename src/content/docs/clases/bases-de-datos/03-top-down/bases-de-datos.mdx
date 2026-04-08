@@ -1,0 +1,275 @@
+---
+title: Bases de datos relacionales
+description: Apuntes de clase — Diseño conceptual y modelo relacional
+---
+
+import ConceptCard from "../../../../../components/ConceptCard.astro";
+import ConceptGrid from "../../../../../components/ConceptGrid.astro";
+import Callout from "../../../../../components/Callout.astro";
+import TwoCol from "../../../../../components/TwoCol.astro";
+import SectionBox from "../../../../../components/SectionBox.astro";
+import Tag from "../../../../../components/Tag.astro";
+import TagRow from "../../../../../components/TagRow.astro";
+import ErdDiagram from "../../../../../components/ErdDiagram.astro";
+
+## 1. Fundamentos del modelo relacional
+
+En el modelo relacional, toda la información se organiza en **relaciones** (tablas).
+Es el modelo más extendido y sirve de base para SQL.
+
+| Término relacional | Equivalente en tabla | Significado                           |
+| ------------------ | -------------------- | ------------------------------------- |
+| Relación           | Tabla                | Conjunto de datos con estructura fija |
+| Tupla              | Fila / registro      | Una instancia de datos                |
+| Atributo           | Columna              | Propiedad del registro                |
+| Dominio            | Tipo de dato         | Valores posibles de una columna       |
+
+<Callout type="info" title="Regla clave">
+  Todos los valores de una misma columna deben ser del mismo tipo. Los atributos
+  solo pueden contener valores atómicos: números, texto, valores lógicos,
+  fechas. No se permiten colecciones ni arreglos anidados (eso pertenece a
+  modelos no relacionales, como los documentales).
+</Callout>
+
+### Clave primaria (primary key)
+
+Es el atributo —o combinación de atributos— que identifica de forma única cada registro.
+
+<ConceptGrid>
+  <ConceptCard
+    label="Unicidad"
+    title="No se repite"
+    desc="Ningún otro registro puede tener el mismo valor de clave primaria."
+  />
+  <ConceptCard
+    label="No nulidad"
+    title="Siempre presente"
+    desc="El valor de la clave primaria nunca puede ser nulo (NULL)."
+  />
+  <ConceptCard
+    label="Clave compuesta"
+    title="Más de un atributo"
+    desc="Dos atributos juntos forman la clave; la combinación debe ser única (ej: país + DNI)."
+  />
+  <ConceptCard
+    label="Sinónimos"
+    title="Clave / llave primaria"
+    desc="Ambos términos son equivalentes y se usan indistintamente en la bibliografía."
+  />
+</ConceptGrid>
+
+---
+
+## 2. Etapas del diseño de bases de datos
+
+1. **Recolección y análisis de requisitos** — identificar participantes, documentos existentes, reglas del negocio.
+2. **Diseño conceptual** — modelo independiente del motor; se usa un diagrama de clases (UML).
+3. **Elección del modelo lógico** — decidir qué tipo de base de datos se usará (relacional, documental, etc.).
+4. **Diseño lógico** — transformar el modelo conceptual aplicando reglas de transformación y normalización.
+5. **Diseño físico** — índices, particionamiento, replicación. Ya no es parte del modelo lógico.
+
+<Callout type="tip" title="Normalización">
+  Técnica que elimina redundancias e inconsistencias en el modelo lógico. Un
+  modelo bien normalizado no siempre es el más rápido; puede requerir más
+  _joins_. El objetivo es consistencia, no solo velocidad.
+</Callout>
+
+---
+
+## 3. Eficiencia vs. consistencia
+
+Pueden existir varios modelos válidos para un mismo problema. Al evaluarlos se considera:
+
+<TwoCol>
+  <SectionBox title="Modelo eficiente (lógico)">
+    - Menor cantidad de _joins_ (saltos entre tablas) - Puede implicar cierta
+    redundancia controlada - Ejemplo: guardar el total de una factura cuando
+    rara vez cambia
+  </SectionBox>
+  <SectionBox title="Optimización física">
+    - Índices (simples o compuestos) - Particionamiento de archivos -
+    Replicación de datos - Tablas temporales para _joins_ masivos
+  </SectionBox>
+</TwoCol>
+
+Un **atributo derivado** (ej: promedio de notas) puede almacenarse si se recalcula pocas veces
+y se consulta con frecuencia, evitando recalcularlo en cada consulta.
+
+---
+
+## 4. Caso de estudio: Campeonato de Fórmula 1
+
+<ErdDiagram
+  id="f1"
+  diagram={`
+  classDiagram
+    class Pais {
+        codigo_iso PK
+        nombre
+    }
+    class Piloto {
+        dni PK
+        nombre
+        fecha_nac
+    }
+    class Escuderia {
+        nombre PK
+    }
+    class Contrato {
+        id PK
+        fecha_inicio
+        fecha_termino
+    }
+    class Clausula {
+        numero PK
+        descripcion
+    }
+    class Automovil {
+        nro_chasis PK
+        estado
+    }
+    class Temporada {
+        anio PK
+        fecha_inicio
+        fecha_termino
+    }
+    class Circuito {
+        nombre PK
+        estado
+    }
+    class Carrera {
+        id PK
+        vueltas
+    }
+    class Inscripcion {
+        id PK
+        lugar_largada
+        lugar_final
+    }
+
+    Pais "1" <-- "*" Piloto : nace en
+    Pais "1" <-- "*" Escuderia : pertenece a
+    Pais "1" <-- "*" Circuito : se ubica en
+    Piloto "1" -- "*" Contrato : firma
+    Escuderia "1" -- "*" Contrato : suscribe
+    Contrato *-- "*" Clausula : se compone de
+    Escuderia "1" -- "*" Automovil : posee
+    Circuito "1" -- "*" Carrera : alberga
+    Temporada "1" -- "*" Carrera : incluye
+
+    Piloto "1" -- "*" Inscripcion
+    Automovil "1" -- "*" Inscripcion
+    Carrera "1" -- "*" Inscripcion
+
+`}
+/>
+
+### Entidades identificadas
+
+<ConceptGrid>
+  <ConceptCard
+    label="Catálogo"
+    title="País"
+    desc="PK: codigo_iso. Almacena el origen de pilotos, escuderías y circuitos."
+  />
+  <ConceptCard
+    label="Entidad"
+    title="Piloto"
+    desc="PK: dni. Atributos: nombre, fecha_nac. Vinculado a un país de origen."
+  />
+  <ConceptCard
+    label="Entidad"
+    title="Escudería"
+    desc="PK: nombre. Vinculada a un país. Gestiona contratos y posee automóviles."
+  />
+  <ConceptCard
+    label="Entidad"
+    title="Contrato"
+    desc="PK: id. Atributos: fecha_inicio, fecha_termino. Une a un piloto con una escudería."
+  />
+  <ConceptCard
+    label="Composición"
+    title="Cláusula"
+    desc="PK: número. Parte estructural del contrato. Dependencia existencial fuerte."
+  />
+  <ConceptCard
+    label="Entidad"
+    title="Automóvil"
+    desc="PK: nro_chasis. Atributo: estado. Pertenece a una única escudería."
+  />
+  <ConceptCard
+    label="Entidad"
+    title="Carrera"
+    desc="PK: id. Atributo: vueltas. Se vincula a un circuito y una temporada."
+  />
+  <ConceptCard
+    label="Entidad"
+    title="Circuito"
+    desc="PK: nombre. Atributo: estado. Ubicado en un país (relación 1:N)."
+  />
+</ConceptGrid>
+
+---
+
+## 5. Conceptos de modelado UML aplicados
+
+### Clase de asociación
+
+Se representa con línea discontinua y sin terminalidad propia. Solo puede relacionarse
+con las clases que le dan origen; si necesita vincularse con otras clases, se convierte
+en una **clase normal**.
+
+### Composición vs. asociación simple
+
+<TwoCol>
+  <SectionBox title="Composición">
+    - El todo "contiene" a la parte - Dependencia existencial fuerte - Si el
+    todo desaparece, la parte también - Ejemplo: _Contrato → Cláusula_
+  </SectionBox>
+  <SectionBox title="Asociación / agregación">
+    - El todo "tiene" a la parte pero no la contiene - La parte puede existir
+    por separado - Ejemplo: _Escudería → Automóvil_
+  </SectionBox>
+</TwoCol>
+
+### Dependencia existencial
+
+<Callout type="warn" title="Restricción de transacciones">
+  Si B no puede existir sin A, hay **dependencia existencial**. Esto implica
+  restricciones en las transacciones: no se puede insertar B sin que exista A.
+  La diferencia con la composición es que en la composición B es parte
+  estructural de A (se consideran un solo objeto).
+</Callout>
+
+### Cardinalidad y sus implicancias
+
+Un piloto puede firmar contratos con muchas escuderías a lo largo del tiempo (relación **N:M**).
+Para identificar unívocamente cada contrato entre el mismo piloto y la misma escudería se necesita:
+
+<TagRow>
+  <Tag>ID de contrato (folio)</Tag>
+  <Tag>Fecha de inicio</Tag>
+  <Tag>Piloto + escudería + fecha inicio</Tag>
+</TagRow>
+
+---
+
+## 6. Resumen de términos clave
+
+<TagRow>
+  <Tag>Relación = tabla</Tag>
+  <Tag>Tupla = fila</Tag>
+  <Tag>Atributo = columna</Tag>
+  <Tag>Clave primaria (PK)</Tag>
+  <Tag>Clave compuesta</Tag>
+  <Tag>Cardinalidad / volumen</Tag>
+  <Tag>Normalización</Tag>
+  <Tag>Atributo derivado</Tag>
+  <Tag>Join</Tag>
+  <Tag>Dependencia existencial</Tag>
+  <Tag>Composición</Tag>
+  <Tag>Clase de asociación</Tag>
+  <Tag>Modelo conceptual</Tag>
+  <Tag>Modelo lógico</Tag>
+  <Tag>Modelo físico</Tag>
+</TagRow>

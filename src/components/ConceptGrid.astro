@@ -1,0 +1,20 @@
+---
+// Envuelve múltiples <ConceptCard> en una grilla 2 columnas
+---
+<div class="concept-grid">
+  <slot />
+</div>
+
+<style>
+  .concept-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 12px 0;
+  }
+  @media (max-width: 600px) {
+    .concept-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

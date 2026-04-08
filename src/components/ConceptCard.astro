@@ -1,0 +1,43 @@
+---
+interface Props {
+  label: string;
+  title: string;
+  desc: string;
+}
+const { label, title, desc } = Astro.props;
+---
+
+<div class="concept-card">
+  <div class="concept-card__label">{label}</div>
+  <div class="concept-card__title">{title}</div>
+  <p class="concept-card__desc">{desc}</p>
+</div>
+
+<style>
+  .concept-card {
+    background: var(--sl-color-bg-nav);
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .concept-card__label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--sl-color-text-accent);
+    margin-bottom: 4px;
+  }
+  .concept-card__title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--sl-color-white);
+    margin-bottom: 4px;
+  }
+  .concept-card__desc {
+    font-size: 13px;
+    color: var(--sl-color-gray-3);
+    line-height: 1.5;
+    margin: 0;
+  }
+</style>

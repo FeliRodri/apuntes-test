@@ -1,0 +1,15 @@
+---
+// Envuelve múltiples <Tag> en una fila con wrap
+---
+<div class="tag-row">
+  <slot />
+</div>
+
+<style>
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 10px 0;
+  }
+</style>

@@ -1,0 +1,20 @@
+---
+// Uso: <TwoCol> con dos <SectionBox> adentro
+---
+<div class="two-col">
+  <slot />
+</div>
+
+<style>
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 12px 0;
+  }
+  @media (max-width: 600px) {
+    .two-col {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
