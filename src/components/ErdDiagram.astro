@@ -67,23 +67,24 @@ const wrapperId = `erd-wrap-${id}`;
           .classBox { stroke-width: 1.5px; fill: ${dark ? "#161b22" : "#ffffff"} !important; }
           g.classGroup text { fill: var(--sl-color-gray-2) !important; font-family: var(--sl-font-mono); font-size: 11px; }
           
-          /* Resaltado universal de PK */
+          /* Evitar eventos puntero en texto para facilitar selección de caja */
           text { pointer-events: none; }
-          tspan:contains("PK"), text:contains("PK") { 
-            fill: var(--sl-color-text-accent) !important; 
-            font-weight: bold; 
-          }
         `;
-        // Inyectar un script pequeño para resaltar PK por contenido (ya que CSS no tiene :contains estable)
+        
+        // Resaltar PK por contenido mediante JavaScript puro (más robusto que CSS :contains)
         const pkScript = document.createElementNS("http://www.w3.org/2000/svg", "script");
         pkScript.textContent = `
-          document.querySelectorAll('text, tspan').forEach(el => {
-            if (el.textContent.includes('PK')) {
-              el.style.fill = 'var(--sl-color-text-accent)';
-              el.style.fontWeight = 'bold';
-            }
-          });
+          (function() {
+            const accent = getComputedStyle(document.documentElement).getPropertyValue('--sl-color-text-accent');
+            document.querySelectorAll('text, tspan').forEach(el => {
+              if (el.textContent.trim().includes('PK')) {
+                el.style.fill = accent || 'var(--sl-color-text-accent)';
+                el.style.fontWeight = 'bold';
+              }
+            });
+          })();
         `;
+        
         svgEl.prepend(style);
         svgEl.appendChild(pkScript);
       }

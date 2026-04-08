@@ -6,6 +6,9 @@ import remarkMath from 'remark-math';
 
 // https://astro.build/config
 export default defineConfig({
+	devToolbar: {
+		enabled: false,
+	},
 	integrations: [
 		starlight({
 			title: 'Mis Apuntes',
