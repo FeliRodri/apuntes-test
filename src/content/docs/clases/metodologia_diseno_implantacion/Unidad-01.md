@@ -3,7 +3,6 @@ title: Clase introducción a Metodologías de Diseño
 description: Unidad 01 Metodologías de Diseño
 ---
 
-## Metodologías de Diseño e Implementación: Introducción
 
 ## Hitos
 

@@ -73,7 +73,7 @@ Para mantener la integridad del modelo, se descartaron los siguientes pasos del 
 - **Paso 6 (Asociaciones n-arias):** Los descuentos se resolvieron secuencialmente sin necesidad de relaciones ternarias complejas.
 - **Paso 7 (Herencia Alt. 2, 3 y 4):** Descartadas para evitar tablas monolíticas llenas de valores nulos (ej. atributos de medicamentos aplicados erróneamente a un champú).
 - **Paso 8 (Categorización):** No existen superclases con identificadores distintos que requieran unificación.
-  :::
+:::
 
 ---
 

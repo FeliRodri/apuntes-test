@@ -1,6 +1,6 @@
 ---
-title: Clase SABDR-pdf04
-description: SABDR con screenshots04
+title: "SABDR: Sistemas Administradores de Bases de Datos Relacionales"
+description: "Sistemas Administradores de Bases de Datos Relacionales - conceptos y modelos"
 ---
 
 ## Sistemas Administradores de Bases de Datos Relacionales (SABDR)

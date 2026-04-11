@@ -80,18 +80,30 @@ src/content/docs/
 ├── index.mdx          ← Página principal
 ├── guia.md            ← Esta guía
 ├── clases/
-│   ├── introduccion.md
-│   ├── programacion/
-│   │   ├── fundamentos.md
-│   │   └── poo.md
-│   └── bases-de-datos/
-│       ├── introduccion.md
-│       └── sql-basico.md
+│   ├── index.md       ← Portal de asignaturas
+│   ├── estadistica-aplicada/
+│   │   ├── est_introduccion.md
+│   │   └── correlacion.md
+│   ├── bases-de-datos/
+│   │   ├── 01-fundamentos/
+│   │   │   ├── bd_introduccion.md
+│   │   │   ├── fundamentos.md
+│   │   │   └── sql-basico.md
+│   │   ├── 02-semantica/
+│   │   │   ├── semantica.md
+│   │   │   └── semantica002.md
+│   │   └── 03-top-down/
+│   │       ├── diseno-top-down.md
+│   │       ├── top-down_farmacia.md
+│   │       └── Analisis-audio.mdx
+│   ├── metodologia_diseno_implantacion/
+│   │   ├── Unidad-01.md
+│   │   ├── Unidad-02.mdx
+│   │   └── Unidad-03.mdx
+│   └── programacion/
+│       ├── fundamentos.md
+│       └── poo.md
 └── proyectos/
-    ├── introduccion.md
-    └── portfolio/
-        ├── descripcion.md
-        └── arquitectura.md
 ```
 
 ## Comandos útiles
