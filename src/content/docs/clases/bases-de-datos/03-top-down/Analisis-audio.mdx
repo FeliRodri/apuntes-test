@@ -1,0 +1,74 @@
+---
+title: "Análisis de Transformación: Modelo Conceptual a Relacional (Caso F1)"
+description: "Análisis detallado y técnico de la transformación del modelo conceptual al relacional, basado en el caso práctico de la Fórmula 1 discutido en la clase."
+---
+
+import Callout from "../../../../../components/Callout.astro";
+import ConceptCard from "../../../../../components/ConceptCard.astro";
+import SectionBox from "../../../../../components/SectionBox.astro";
+
+# Análisis de Transformación: Modelo Conceptual a Relacional (Caso F1)
+
+<Callout type="tip" title="Nota del Profesor">
+  ¡Hola! Como experto en ingeniería de software y profesor de Bases de Datos, he
+  solicitado la generación de unas tarjetas de memoria (flashcards) enfocadas
+  específicamente en las 8 reglas de transformación. Estarán listas en unos
+  minutos en tu panel.
+</Callout>
+
+A continuación, presento el análisis detallado y técnico de la transformación del modelo conceptual al relacional, basado en el caso práctico de la **Fórmula 1** discutido en la clase:
+
+<SectionBox title="1. Análisis de Entidades (Fuertes vs. Débiles)">
+  En el diseño de bases de datos, la fortaleza de una entidad radica en su capacidad de identificarse por sí misma.
+
+  <div className="grid-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+    <div>
+      <strong>Entidades Fuertes:</strong> Poseen un identificador propio y único.
+      <ul>
+        <li><strong>Piloto:</strong> Identificado por su DNI.</li>
+        <li><strong>Escudería:</strong> Identificada por su nombre.</li>
+        <li><strong>Contrato:</strong> Identificador único (id o folio).</li>
+        <li><strong>Automóvil:</strong> Identificado por su nro_chasis.</li>
+      </ul>
+    </div>
+    <div>
+      <strong>Entidades Débiles:</strong> Dependen de una entidad fuerte.
+      <ul>
+        <li><strong>Cláusula:</strong> Depende existencialmente de un Contrato. Su PK es compuesta, absorbiendo el ID del contrato.</li>
+      </ul>
+    </div>
+  </div>
+</SectionBox>
+
+<SectionBox title="2. Reglas de Transformación aplicadas al caso F1">
+  El paso del diagrama de clases al esquema relacional sigue reglas formales:
+
+  <ul style="list-style: none; padding: 0;">
+    <li><ConceptCard title="Paso 1: Entidades Fuertes">Cada entidad se convierte en una tabla con su Clave Primaria (PK). Ej: Piloto $\rightarrow$ `dni`.</ConceptCard></li>
+    <li><ConceptCard title="Paso 2: Entidades Débiles">La tabla hereda como Clave Foránea (FK) la PK de la entidad fuerte. Ej: Cláusula $\rightarrow$ Contrato.</ConceptCard></li>
+    <li><ConceptCard title="Paso 3: Asociaciones 1:1">Se cruza la PK de una tabla hacia la otra como FK.</ConceptCard></li>
+    <li><ConceptCard title="Paso 4: Asociaciones 1:N">La PK del lado '1' se traspasa como FK al lado 'N'. Ej: Escudería $\rightarrow$ Automóvil.</ConceptCard></li>
+    <li><ConceptCard title="Paso 5: Asociaciones M:N">Requiere una tabla intermedia con las FKs de ambas entidades.</ConceptCard></li>
+    <li><ConceptCard title="Paso 6: Asociaciones N-arias">Genera una nueva tabla que junta las PK de todas las entidades involucradas.</ConceptCard></li>
+  </ul>
+</SectionBox>
+
+<SectionBox title="3. Casos Especiales">
+  <SectionBox title="La Asociación Ternaria (Inscripción)">
+    Un piloto no corre "solo"; requiere un Automóvil y una Carrera. Esta convergencia se resuelve mediante una clase de asociación llamada **Inscripción**.
+
+    En el modelo relacional, esto exige una tabla central (**Inscripcion**) que cruza las identidades del Piloto, el Automóvil y la Carrera, almacenando atributos como `lugar_largada` y `lugar_final`.
+
+  </SectionBox>
+
+  <SectionBox title="Alternativas de Herencia y Categorización">
+    Cuando existe herencia, el modelo relacional ofrece estas alternativas:
+
+    <ul>
+      <li><strong>Alternativas 1 y 2:</strong> Tablas separadas para superclase y subclases (misma PK). Alta normalización, más _joins_.</li>
+      <li><strong>Alternativas 3 y 4:</strong> Una sola tabla con "atributo discriminador". Menos tablas, pero más valores NULL.</li>
+      <li><strong>Categorización (Interfaces):</strong> Uso de una **Clave Sustituta** (_Surrogate Key_) para unificar entidades con claves distintas (ej: Persona vs Empresa).</li>
+    </ul>
+
+  </SectionBox>
+</SectionBox>

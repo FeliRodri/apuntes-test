@@ -1,0 +1,143 @@
+---
+title: "Diseño Top-Down"
+description: Guía sobre el diseño Top-Down de Bases de Datos Relacionales.
+---
+
+import Callout from "../../../../../components/Callout.astro";
+import ConceptCard from "../../../../../components/ConceptCard.astro";
+import SectionBox from "../../../../../components/SectionBox.astro";
+
+<SectionBox title="Diseño Top-Down de una Base de Datos Relacional">
+  <SectionBox title="Fundamentos del Modelo de Datos Relacional">
+    Un modelo de datos lógico se genera al tomar un modelo conceptual e incorporarle las características propias de la clase de software sobre el cual se realizará la posterior implementación.
+
+    **Modelos de datos lógicos existentes:**
+    * Jerárquico
+    * Reticular
+    * Relacional
+    * Orientado al Objeto
+    * Multidimensional
+
+  </SectionBox>
+</SectionBox>
+
+<SectionBox title="Terminología Básica del Modelo Relacional">
+  <ConceptCard title="Relación">
+    Una relación corresponde a una tabla bidimensional, en la cual el orden de
+    sus filas (registros) es irrelevante.
+  </ConceptCard>
+  <ConceptCard title="Dominio">
+    Al conjunto de valores posibles para una columna se llama dominio.
+  </ConceptCard>
+  <ConceptCard title="Clave primaria">
+    Cada fila es única, y la unicidad está dada al manejar una columna que no
+    soporte valores repetidos.
+  </ConceptCard>
+  <ConceptCard title="Cardinalidad">
+    Es el número de filas de una relación.
+  </ConceptCard>
+</SectionBox>
+
+<SectionBox title="Formas de Obtener un Modelo Relacional">
+  * **Esquema Top-Down:** Construir un modelo conceptual y luego convertirlo en uno relacional, aplicando reglas de transformación formales.
+  * **Esquema Bottom-Up:** Mediante la integración de modelos parciales, obtenidos a partir de la normalización de las vistas que componen un sistema.
+
+![Captura de Diapositiva 7](./diseño_top-down/slide_p7.png)
+
+</SectionBox>
+
+<SectionBox title="Etapas del Diseño Top-Down">
+  <SectionBox title="Etapa 1: Recolección y Análisis de Requisitos">
+    **Objetivo:** Identificar las necesidades de información de los usuarios.
+
+    **Pasos:**
+    * Identificación de las áreas de aplicación y grupos de usuarios.
+    * Análisis y estudio de la documentación existente.
+
+    <Callout type="tip" title="Ejercicio: Campeonato de Fórmula 1">
+      En un campeonato mundial de carreras de fórmula 1, es posible identificar los siguientes hechos:
+      * Los pilotos firman contratos para correr en una temporada.
+      * Los automóviles deben estar inscritos en una escudería.
+      * En una temporada se realizan muchas carreras en circuitos.
+
+      > **📚 Soluciones Disponibles:**
+      > * [Análisis Lógico Caso F1](/clases/bases-de-datos/03-top-down/top-down-f1)
+      > * [Resolución Paso a Paso](/clases/bases-de-datos/03-top-down/top-down-f1-detallado)
+    </Callout>
+
+  </SectionBox>
+
+<SectionBox title="Etapa 2: Diseño Conceptual">
+  **Objetivo:** Construir un esquema conceptual independiente del motor de
+  datos.
+</SectionBox>
+
+  <SectionBox title="Etapa 3: Elección de Software">
+    **Objetivo:** Seleccionar el tipo de software que mejor se adecúe a las necesidades.
+
+    ![Captura de Diapositiva 12](./diseño_top-down/slide_p12.png)
+
+  </SectionBox>
+
+  <SectionBox title="Etapa 4: Diseño Lógico">
+    **Objetivo:** Generar un esquema basado en el modelo de datos soportado.
+    * Transformación a modelo relacional u orientado a objetos.
+    * Conversión a un software de bases de datos específico.
+  </SectionBox>
+</SectionBox>
+
+<SectionBox title="Método Top-Down: Reglas de Transformación">
+  La transformación se realiza mediante la aplicación de reglas formales usando diagramas de clases UML.
+
+  <SectionBox title="Paso 1: Entidades Fuertes">
+    Se crea una relación que incluya todos los atributos simples. Se escoge un atributo clave como clave primaria.
+
+    ![Paso 1](./diseño_top-down/slide_p17.png)
+
+  </SectionBox>
+
+  <SectionBox title="Paso 2: Entidades Débiles">
+    Se crea una relación con atributos simples más la clave primaria de la entidad fuerte de la cual depende.
+
+    ![Paso 2](./diseño_top-down/slide_p19.png)
+
+  </SectionBox>
+
+  <SectionBox title="Paso 3: Asociaciones 1:1">
+    Se identifica la relación y se incluye la clave primaria de una como clave foránea en la otra.
+
+    ![Paso 3](./diseño_top-down/slide_p21.png)
+
+  </SectionBox>
+
+  <SectionBox title="Paso 4: Asociaciones 1:N">
+    Se incluye la clave primaria del lado "1" como clave foránea en el lado "N".
+
+    ![Paso 4](./diseño_top-down/slide_p23.png)
+
+  </SectionBox>
+
+  <SectionBox title="Paso 5: Asociaciones M:N">
+    Se crea una nueva relación con las claves primarias de ambas entidades participantes.
+
+    ![Paso 5](./diseño_top-down/slide_p25.png)
+
+  </SectionBox>
+
+  <SectionBox title="Paso 7: Herencia">
+    **Alternativas:**
+    1. Una relación para superclase y una para cada subclase.
+    2. Relaciones solo para subclases con atributos de la superclase.
+    3. Una sola relación con todos los atributos y un discriminador.
+
+    ![Herencia](./diseño_top-down/slide_p28.png)
+
+  </SectionBox>
+
+  <SectionBox title="Paso 8: Categorización">
+    Si las superclases tienen diferentes IDs, se crea una **clave sustituta**.
+
+    ![Categorización](./diseño_top-down/slide_p34.png)
+
+  </SectionBox>
+</SectionBox>

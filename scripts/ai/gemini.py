@@ -1,5 +1,40 @@
 import os
 import sys
+import time
+import tempfile
+import shutil
+
+def _upload_pdf_for_vision(client, filepath):
+    """Maneja la lógica de sistema de archivos y subida para Gemini Vision."""
+    print("👁️  Inyectando PDF a Gemini Vision para análisis visual de diagramas y gráficos...")
+    # Crear copia temporal con nombre ASCII puro para evitar errores de encoding en la API de Google
+    with tempfile.NamedTemporaryFile(suffix='.pdf', delete=False) as temp_pdf:
+        shutil.copy2(filepath, temp_pdf.name)
+        safe_filepath = temp_pdf.name
+        
+    uploaded_file = client.files.upload(file=safe_filepath)
+    
+    # Limpiar archivo temporal inmediatamente después de subirlo
+    os.remove(safe_filepath)
+    print("👁️  Visión artificial activada. Leyendo texto y procesando imágenes...")
+    return uploaded_file
+
+def _generate_with_retry(client, contents_to_generate, max_retries=4):
+    """Encapsula la lógica de red y reintentos para separar responsabilidades."""
+    for attempt in range(max_retries):
+        try:
+            response = client.models.generate_content(
+                model='gemini-2.5-flash',
+                contents=contents_to_generate,
+            )
+            return response
+        except Exception as api_err:
+            if attempt == max_retries - 1:
+                raise api_err
+            
+            print(f"⚠️  Servidores de IA saturados (Intento {attempt+1}/{max_retries}). Reintentando en 5 segundos...")
+            time.sleep(5)
+    return None
 
 def synthesize(raw_text, filepath=None):
     """Usa la IA de Gemini para sintetizar los apuntes y 'ver' PDFs."""
@@ -25,11 +60,13 @@ def synthesize(raw_text, filepath=None):
 REGLAS ESTRICTAS:
 1. NUNCA uses un solo '#' y EVITA usar '####' o '#####'. Usa EXCLUSIVAMENTE '##' para las secciones principales y '###' para las subsecciones, ya que Starlight solo muestra estos niveles en su tabla de contenidos (sidebar derecho).
 2. Usa listas para enumerar conceptos importantes.
-3. Usa Callouts de Starlight (:::note, :::tip, :::danger, :::caution) para resaltes. ATENCIÓN: Si agregas un título al callout, DEBE ir entre corchetes pegado a los dos puntos. Ejemplo: :::note[Definición de X]. Luego cierras con ::: al final.
+3. AHORA USAS COMPONENTES MDX AVANZADOS. Tienes disponibles `<Callout>`, `<ConceptGrid>`, `<ConceptCard>`, etc.
+   - Para notas o advertencias, usa: `<Callout type="info" title="Título">Mensaje</Callout>` (tipos: info, tip, caution, danger).
+   - Para definiciones o conceptos clave, usa esta estructura: `<ConceptGrid><ConceptCard label="Concepto" title="Nombre" desc="Explicación breve" /></ConceptGrid>`.
 4. Elimina basura textual como "Página 1", "Unidad 1", pies de página o índices vacíos.
 5. Formatea fragmentos de código con bloques (ej. ```sql).
-6. CRÍTICO SOBRE CAPTURAS VISUALES: En el texto extraído que te proveeré, cada página está marcada con una ruta a su captura fotográfica (con formato exacto `![Captura de Diapositiva X](./carpeta/slide_pX.png)`). 
-   - SI LA DIAPOSITIVA contiene un diagrama de flujo, tabla gráfica, mapa conceptual vectorial o elemento visual clave que sea valioso para el estudiante universitario, ESTÁS OBLIGADO a copiar y pegar esa ruta exacta (ej: `./mitema/slide_p4.png`) integrándola en la sección correspondiente.
+6. CRÍTICO SOBRE CAPTURAS VISUALES: En el texto extraído que te proveeré, cada página está marcada con una ruta a su captura fotográfica. 
+   - SI LA DIAPOSITIVA contiene un diagrama de flujo, tabla gráfica o visual clave, ESTÁS OBLIGADO a copiar y pegar la RUTA ORIGINAL EXACTA proporcionada en el texto base (SIN MODIFICARLA ni inventar nombres de carpetas) integrándola en la sección.
    - SI LA DIAPOSITIVA es únicamente texto (bullets, definiciones teóricas, listados), DEBES OMITIR y ELIMINAR su enlace `![Captura...]` de tus apuntes finales para no saturar al estudiante con fotos de texto puro.
    - BAJO NINGUNA CIRCUNSTANCIA inventes nombres de archivo (como "unnamed-chunk"). Usa SOLAMENTE los tags proporcionados. NO uses mermaid.
 7. Tu respuesta debe ser EXCLUSIVAMENTE el texto Markdown sintetizado. SIN saludos, SIN bloques "```markdown" englobando todo tu output.
@@ -40,23 +77,9 @@ REGLAS ESTRICTAS:
     
     # Integración con Gemini Vision: Si es PDF, subirlo a la API para activar el análisis visual
     if filepath and str(filepath).lower().endswith('.pdf'):
-        print("👁️  Inyectando PDF a Gemini Vision para análisis visual de diagramas y gráficos...")
         try:
-            import tempfile
-            import shutil
-            
-            # Crear copia temporal con nombre ASCII puro para evitar errores de encoding en la API de Google
-            with tempfile.NamedTemporaryFile(suffix='.pdf', delete=False) as temp_pdf:
-                shutil.copy2(filepath, temp_pdf.name)
-                safe_filepath = temp_pdf.name
-                
-            uploaded_file = client.files.upload(file=safe_filepath)
-            
-            # Limpiar archivo temporal inmediatamente después de subirlo
-            os.remove(safe_filepath)
-            
+            uploaded_file = _upload_pdf_for_vision(client, filepath)
             contents_to_generate.append(uploaded_file)
-            print("👁️  Visión artificial activada. Leyendo texto y procesando imágenes...")
         except Exception as e:
             print(f"⚠️  Aviso: No se pudo inyectar para análisis visual ({e}). Cayendo a análisis de solo-texto.")
             contents_to_generate.append(f"Texto extraído a sintetizar:\n{raw_text}")
@@ -64,23 +87,7 @@ REGLAS ESTRICTAS:
         contents_to_generate.append(f"Texto extraído a sintetizar:\n{raw_text}")
 
     try:
-        import time
-        max_retries = 4
-        response = None
-        
-        for attempt in range(max_retries):
-            try:
-                response = client.models.generate_content(
-                    model='gemini-2.5-flash',
-                    contents=contents_to_generate,
-                )
-                break # Éxito, salir del loop
-            except Exception as api_err:
-                if attempt == max_retries - 1:
-                    raise api_err # Lanzar finalmente si todos los intentos fallaron
-                
-                print(f"⚠️  Servidores de IA saturados (Intento {attempt+1}/{max_retries}). Reintentando en 5 segundos...")
-                time.sleep(5)
+        response = _generate_with_retry(client, contents_to_generate)
                 
         content = response.text.strip()
         # Limpiar si el LLM envuelve todo en un bloque markdown
