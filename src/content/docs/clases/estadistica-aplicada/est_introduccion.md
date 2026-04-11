@@ -1,6 +1,6 @@
 ---
-title: Clase introduccion a la estadistica pdf
-description: Estadistica Aplicada 01-pdf
+title: "Introducción a la Estadística"
+description: "Conceptos fundamentales de estadística descriptiva: población, muestra, variables y medidas de tendencia central"
 ---
 
 ## Estadística Aplicada
@@ -155,14 +155,14 @@ Las medidas estadísticas se clasifican en:
 - **Media Aritmética o Promedio ($\bar{X}$):**
   - Representa un "punto de equilibrio" del conjunto de datos.
   - **Fórmula general:**
-    $$ \bar{X} = \frac{\sum\_{i=1}^{n} X_i}{n} $$
+    $$ \bar{X} = \frac{\sum_{i=1}^{n} X_i}{n} $$
   - **Propiedad (al sumar una constante):**
-    $$ \frac{\sum\_{i=1}^{n} (X_i + C)}{n} = \bar{X} + C $$
+    $$ \frac{\sum_{i=1}^{n} (X_i + C)}{n} = \bar{X} + C $$
   - **Propiedad (al multiplicar por una constante):**
-    $$ \frac{\sum\_{i=1}^{n} (C \cdot X_i)}{n} = C \cdot \bar{X} $$
+    $$ \frac{\sum_{i=1}^{n} (C \cdot X_i)}{n} = C \cdot \bar{X} $$
   - **Notación para Población y Muestra:**
     - **Población ($\mu$):**
-      $$ \mu = \frac{\sum\_{i=1}^{N} X_i}{N} $$
+      $$ \mu = \frac{\sum_{i=1}^{N} X_i}{N} $$
     - **Muestra ($\bar{X}$):**
       $$ \bar{x} = \frac{\sum\_{i=1}^{n} x_i}{n} $$
 - **Mediana (Md):**
@@ -183,24 +183,24 @@ Estas medidas nos indican el grado de variabilidad o diseminación de los datos 
 - **Varianza ($S^2$ o $\sigma^2$):**
   - Es el "promedio" de las distancias cuadráticas de cada observación respecto a su media.
   - **Fórmula para la muestra:**
-    $$ S^2 = \frac{\sum\_{i=1}^{n} (x_i - \bar{x})^2}{n - 1} $$
+    $$ S^2 = \frac{\sum_{i=1}^{n} (x_i - \bar{x})^2}{n - 1} $$
     - O de forma equivalente:
       $$ S^2 = \frac{\sum x_i^2 - n\bar{x}^2}{n - 1} $$
 
   - **Notación para Población y Muestra:**
     - **Población ($\sigma^2$):**
-      $$ \sigma^2 = \frac{\sum\_{i=1}^{N} (X_i - \mu)^2}{N} $$
+      $$ \sigma^2 = \frac{\sum_{i=1}^{N} (X_i - \mu)^2}{N} $$
     - **Muestra ($S^2$):**
-      $$ S^2 = \frac{\sum\_{i=1}^{n} (x_i - \bar{x})^2}{n - 1} $$
+      $$ S^2 = \frac{\sum_{i=1}^{n} (x_i - \bar{x})^2}{n - 1} $$
 
 - **Desviación Estándar ($S$ o $\sigma$):**
   - Es la raíz cuadrada de la varianza. Representa el promedio de las distancias de cada observación a la media, en las unidades originales de los datos.
   - **Fórmula para la muestra:**
-    $$ S = \sqrt{ \frac{\sum\_{i=1}^{n} (x_i - \bar{x})^2}{n - 1} } $$
+    $$ S = \sqrt{ \frac{\sum_{i=1}^{n} (x_i - \bar{x})^2}{n - 1} } $$
 - **Rango ($R$):**
   - La diferencia entre el valor máximo y el valor mínimo en un conjunto de datos.
   - **Fórmula:**
-    $$ R = X*{\text{max}} - X*{\text{min}} $$
+    $$ R = X_{\text{max}} - X_{\text{min}} $$
 - **Coeficiente de Variación ($C.V.$):**
   - Una medida relativa de dispersión que indica la variabilidad de los datos en relación con la media. Es útil para comparar la dispersión de conjuntos de datos con diferentes unidades o medias.
   - **Fórmula:**
@@ -217,30 +217,30 @@ Son medidas útiles para resumir las propiedades de grandes volúmenes de datos 
   - Dividen un conjunto ordenado de observaciones en cien partes iguales.
   - El percentil $p$ es el valor por debajo del cual se encuentra el $p$% del total de observaciones, y por encima del cual se encuentra el $(100 - p)$% restante.
   - **Fórmula:**
-    $$ P*p = X*{\left(\frac{p \cdot n}{100}\right)} $$
+    $$ P_p = X_{\left(\frac{p \cdot n}{100}\right)} $$
   - **Observación:** $0 < p < 100$.
 - **Deciles ($D_p$):**
   - Dividen un conjunto ordenado de observaciones en diez partes iguales.
   - El decil $p$ es el valor por debajo del cual se encuentra el $p$% del total de observaciones, y por encima del cual se encuentra el $(100 - p)$% restante.
   - **Fórmula:**
-    $$ D*p = X*{\left(\frac{p \cdot n}{10}\right)} $$
+    $$ D_p = X_{\left(\frac{p \cdot n}{10}\right)} $$
   - **Observación:** $0 < p < 10$.
 - **Quintiles ($Q_p$):**
   - Dividen un conjunto ordenado de observaciones en cinco partes iguales.
   - El quintil $p$ es el valor por debajo del cual se encuentra el $p$% del total de observaciones, y por encima del cual se encuentra el $(100 - p)$% restante.
   - **Fórmula:**
-    $$ Q*p = X*{\left(\frac{p \cdot n}{5}\right)} $$
+    $$ Q_p = X_{\left(\frac{p \cdot n}{5}\right)} $$
   - **Observación:** $0 < p < 5$.
 - **Cuartiles ($C_p$):**
   - Dividen un conjunto ordenado de observaciones en cuatro partes iguales.
   - El cuartil $p$ es el valor por debajo del cual se encuentra el $p$% del total de observaciones, y por encima del cual se encuentra el $(100 - p)$% restante.
   - **Fórmula:**
-    $$ C*p = X*{\left(\frac{p \cdot n}{4}\right)} $$
+    $$ C_p = X_{\left(\frac{p \cdot n}{4}\right)} $$
   - **Observación:** $0 < p < 4$.
 
 ### Relaciones Importantes entre Cuantiles
 
-$$ Md = P\_{50} = D_5 = C_2 $$
+$$ Md = P_{50} = D_5 = C_2 $$
 
 ## Correlación
 

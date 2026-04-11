@@ -1,6 +1,6 @@
 ---
 title: Clase Semántica
-description:  Semántica de las Bases de Datos
+description: Semántica de las Bases de Datos
 ---
 
 ## Semántica de los Datos

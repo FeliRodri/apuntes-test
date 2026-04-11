@@ -1,6 +1,6 @@
 ---
-title: Clase estadistica Correlacion
-description: Estadistica Aplicada 02
+title: "Estadística: Correlación y Regresión"
+description: "Correlación de Pearson, recta de regresión lineal y mínimos cuadrados ordinarios"
 ---
 
 ## Estadística Aplicada

@@ -1,6 +1,6 @@
 ---
-title: Clase Semantica-Imagenes-pdf02
-description: Semantica de Bases de Datos con screenshots02
+title: "Semántica de Bases de Datos (Parte 2)"
+description: "Continuación de semántica de bases de datos"
 ---
 
 ## Semántica de los Datos

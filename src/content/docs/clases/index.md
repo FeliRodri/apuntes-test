@@ -35,12 +35,20 @@ description: Índice central de materias, unidades y apuntes estructurados.
 
 Formularios y transformaciones con el motor tipográfico oficial (LaTeX / KaTeX).
 
-- [Introducción y Muestreo Paralelo](/clases/estadistica-aplicada/est_introduccion)
-- [Unidad: Correlación Lógica](/clases/estadistica-aplicada/correlacion)
+- [Introducción y Muestreo Paralelo](../estadistica-aplicada/est_introduccion)
+- [Unidad: Correlación Lógica](../estadistica-aplicada/correlacion)
+
+---
+
+### 📐 Metodología de Diseño e Implementación
+
+- [Unidad 1: Introducción a Metodologías de Diseño](../metodologia_diseno_implantacion/Unidad-01)
+- [Unidad 2: Principios de Diseño Metodológico](../metodologia_diseno_implantacion/Unidad-02)
+- [Unidad 3: Modelo de Diseño Metodológico](../metodologia_diseno_implantacion/Unidad-03)
 
 ---
 
 ### 💻 Programación
 
-- [Fundamentos de Programación](/clases/programacion/fundamentos)
-- [Paradigma de Orientación a Objetos](/clases/programacion/poo)
+- [Fundamentos de Programación](../programacion/fundamentos)
+- [Paradigma de Orientación a Objetos](../programacion/poo)
