@@ -1,130 +1,25 @@
 ---
+import MermaidDiagram from "./MermaidDiagram.astro";
+
 interface Props {
   diagram: string;
   id?: string;
 }
+
 const { diagram, id = "erd-default" } = Astro.props;
-const wrapperId = `erd-wrap-${id}`;
+
+const erStyles = `
+  .er.entityBox { stroke-width: 1.5px; }
+  .er.entityLabel { font-weight: 700; fill: var(--sl-color-white) !important; }
+  .er.attributeBox .label { fill: var(--sl-color-gray-2) !important; font-family: var(--sl-font-mono); }
+  .er.attributeBox .type { fill: var(--sl-color-gray-3) !important; font-style: italic; font-size: 11px; }
+`;
 ---
 
-<div class="erd-container">
-  <div id={wrapperId} class="erd-inner">
-    <p class="erd-loading">Cargando diagrama…</p>
-  </div>
-</div>
-
-<script define:vars={{ diagram, wrapperId }}>
-  (async () => {
-    const wrap = document.getElementById(wrapperId);
-    try {
-      const { default: mermaid } = await import(
-        "https://esm.sh/mermaid@11/dist/mermaid.esm.min.mjs"
-      );
-      const dark =
-        document.documentElement.getAttribute("data-theme") === "dark";
-
-      // Helper para obtener colores de Starlight (variables CSS)
-      const slColor = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-
-      mermaid.initialize({
-        startOnLoad: false,
-        theme: "base",
-        fontFamily: "var(--sl-font-mono)",
-        themeVariables: {
-          darkMode: dark,
-          fontSize: "12px",
-          // Colores Base
-          primaryColor: dark ? "#1b1f24" : "#f6f8fa",
-          primaryBorderColor: slColor("--sl-color-hairline") || (dark ? "#30363d" : "#d0d7de"),
-          primaryTextColor: slColor("--sl-color-white") || (dark ? "#e6edf3" : "#1f2328"),
-          lineColor: slColor("--sl-color-gray-4") || (dark ? "#8b949e" : "#8c959f"),
-          textColor: slColor("--sl-color-white") || (dark ? "#e6edf3" : "#1f2328"),
-          mainBkg: dark ? "#0d1117" : "#ffffff",
-          // Específico para ERD
-          entityFill: dark ? "#161b22" : "#ffffff",
-          entityBorder: slColor("--sl-color-hairline") || (dark ? "#30363d" : "#d0d7de"),
-          attributeFill: dark ? "#161b22" : "#ffffff",
-          attributeTextColor: slColor("--sl-color-gray-2") || (dark ? "#7d8590" : "#6e7781"),
-        },
-      });
-
-      const uid = `erd-svg-${Math.random().toString(36).slice(2)}`;
-      const { svg } = await mermaid.render(uid, diagram);
-      wrap.innerHTML = svg;
-
-      // Estilos adicionales post-renderizado para el resaltado
-      const svgEl = wrap.querySelector("svg");
-      if (svgEl) {
-        const style = document.createElementNS("http://www.w3.org/2000/svg", "style");
-        style.textContent = `
-          .er.entityBox { stroke-width: 1.5px; }
-          .er.entityLabel { font-weight: 700; fill: var(--sl-color-white) !important; }
-          .er.attributeBox .label { fill: var(--sl-color-gray-2) !important; font-family: var(--sl-font-mono); }
-          .er.attributeBox .type { fill: var(--sl-color-gray-3) !important; font-style: italic; font-size: 11px; }
-
-          /* Soporte para classDiagram */
-          .classTitle { font-weight: 700; fill: var(--sl-color-white) !important; }
-          .classBox { stroke-width: 1.5px; fill: ${dark ? "#161b22" : "#ffffff"} !important; }
-          g.classGroup text { fill: var(--sl-color-gray-2) !important; font-family: var(--sl-font-mono); font-size: 11px; }
-          
-          /* Evitar eventos puntero en texto para facilitar selección de caja */
-          text { pointer-events: none; }
-        `;
-        
-        // Resaltar PK por contenido mediante JavaScript puro (más robusto que CSS :contains)
-        const pkScript = document.createElementNS("http://www.w3.org/2000/svg", "script");
-        pkScript.textContent = `
-          (function() {
-            const accent = getComputedStyle(document.documentElement).getPropertyValue('--sl-color-text-accent');
-            document.querySelectorAll('text, tspan').forEach(el => {
-              if (el.textContent.trim().includes('PK')) {
-                el.style.fill = accent || 'var(--sl-color-text-accent)';
-                el.style.fontWeight = 'bold';
-              }
-            });
-          })();
-        `;
-        
-        svgEl.prepend(style);
-        svgEl.appendChild(pkScript);
-      }
-
-      // Redondear esquinas de entidades (mantener lógica existente mejorada)
-      wrap.querySelectorAll("svg .node, svg rect.entityBox, svg rect.classBox").forEach((node) => {
-        const shape = node.tagName === "rect" ? node : node.querySelector("path[d], rect");
-        if (!shape) return;
-        shape.setAttribute("rx", "8");
-        shape.setAttribute("ry", "8");
-      });
-    } catch (e) {
-      console.error("Mermaid error:", e);
-      wrap.innerHTML = `<p class="erd-error">No se pudo renderizar el diagrama ERD.<br><code>${e.message}</code></p>`;
-    }
-  })();
-</script>
-
-<style>
-  .erd-container {
-    background: var(--sl-color-bg-nav);
-    border: 1px solid var(--sl-color-hairline);
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin: 2rem 0;
-    overflow-x: auto;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-  .erd-loading,
-  .erd-error {
-    font-size: 14px;
-    font-family: var(--sl-font-mono);
-    color: var(--sl-color-gray-3);
-    text-align: center;
-    padding: 2rem;
-  }
-  .erd-inner :global(svg) {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-  }
-</style>
+<MermaidDiagram
+  id={id}
+  diagram={diagram}
+  type="erDiagram"
+  errorLabel="diagrama ERD"
+  diagramStyles={erStyles}
+/>

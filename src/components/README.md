@@ -12,7 +12,9 @@ src/
 │   ├── SectionBox.astro    ← caja con título para usar dentro de TwoCol
 │   ├── Tag.astro           ← etiqueta pill
 │   ├── TagRow.astro        ← fila de Tags con wrap
-│   └── ErdDiagram.astro    ← diagrama ERD con mermaid.js
+│   ├── MermaidDiagram.astro← base Mermaid (render + theme + errores)
+│   ├── ErdDiagram.astro    ← wrapper para diagramas ER (erDiagram)
+│   └── ClassDiagram.astro  ← wrapper para diagramas de clases (classDiagram)
 └── content/
     └── docs/
         └── bases-de-datos.mdx
@@ -25,13 +27,15 @@ src/
 3. Ajusta los imports en el MDX si tus componentes están en otra carpeta:
 
 ```mdx
-import ConceptCard from '../../components/ConceptCard.astro';
+import ConceptCard from "../../components/ConceptCard.astro";
 ```
 
 ## Notas importantes
 
 ### Variables CSS de Starlight
+
 Los componentes usan exclusivamente variables de Starlight:
+
 - `--sl-color-bg-nav` — fondo de tarjetas
 - `--sl-color-hairline` — bordes
 - `--sl-color-white` — texto principal
@@ -41,18 +45,33 @@ Los componentes usan exclusivamente variables de Starlight:
 
 Funcionan automáticamente en modo claro y oscuro sin configuración adicional.
 
-### ErdDiagram y Mermaid
-El componente `ErdDiagram.astro` carga mermaid.js desde `esm.sh` en el cliente.
+### Mermaid y Wrappers
+
+`MermaidDiagram.astro` es el componente base que:
+
+- carga mermaid.js desde `esm.sh` en cliente,
+- aplica tema compatible con Starlight,
+- maneja errores de render,
+- acepta `type="erDiagram" | "classDiagram"` o detecta el tipo desde la primera línea del diagrama.
+
+Sobre ese base existen wrappers especializados:
+
+- `ErdDiagram.astro` para `erDiagram`
+- `ClassDiagram.astro` para `classDiagram`
+
 No requiere instalar ninguna dependencia adicional.
 
 Starlight también tiene soporte nativo para mermaid via el plugin oficial:
+
 ```
 npm install @astrojs/starlight-mermaid
 ```
-Si ya lo usas, puedes reemplazar `<ErdDiagram>` con bloques de código ` ```mermaid ` directamente en el MDX.
+
+Si ya lo usas, puedes reemplazar `<ErdDiagram>` y `<ClassDiagram>` con bloques de código ` ```mermaid ` directamente en el MDX.
 
 ### Modo oscuro
-El componente `ErdDiagram` detecta el tema de Starlight leyendo
+
+El componente base `MermaidDiagram` detecta el tema de Starlight leyendo
 `document.documentElement.getAttribute("data-theme")`. Starlight establece
 este atributo automáticamente al cambiar de tema, por lo que funciona sin
 configuración adicional.
@@ -60,44 +79,64 @@ configuración adicional.
 ## Uso de los componentes
 
 ```mdx
-import ConceptCard from '../components/ConceptCard.astro';
-import ConceptGrid from '../components/ConceptGrid.astro';
-import Callout from '../components/Callout.astro';
-import TwoCol from '../components/TwoCol.astro';
-import SectionBox from '../components/SectionBox.astro';
-import Tag from '../components/Tag.astro';
-import TagRow from '../components/TagRow.astro';
-import ErdDiagram from '../components/ErdDiagram.astro';
+import ConceptCard from "../components/ConceptCard.astro";
+import ConceptGrid from "../components/ConceptGrid.astro";
+import Callout from "../components/Callout.astro";
+import TwoCol from "../components/TwoCol.astro";
+import SectionBox from "../components/SectionBox.astro";
+import Tag from "../components/Tag.astro";
+import TagRow from "../components/TagRow.astro";
+import ErdDiagram from "../components/ErdDiagram.astro";
+import ClassDiagram from "../components/ClassDiagram.astro";
 
 <!-- Grilla de tarjetas -->
+
 <ConceptGrid>
   <ConceptCard label="Tipo" title="Nombre" desc="Descripción del concepto." />
 </ConceptGrid>
 
 <!-- Callout -->
+
 <Callout type="info" title="Título opcional">
   Contenido del callout. Acepta **markdown** dentro.
 </Callout>
 
 <!-- Dos columnas -->
+
 <TwoCol>
-  <SectionBox title="Columna 1">
-    - item a
-    - item b
-  </SectionBox>
-  <SectionBox title="Columna 2">
-    - item c
-  </SectionBox>
+  <SectionBox title="Columna 1">- item a - item b</SectionBox>
+  <SectionBox title="Columna 2">- item c</SectionBox>
 </TwoCol>
 
 <!-- Tags -->
+
 <TagRow>
   <Tag>término 1</Tag>
   <Tag>término 2</Tag>
 </TagRow>
 
 <!-- Diagrama ERD -->
-<ErdDiagram id="mi-erd" diagram={`erDiagram
+
+<ErdDiagram
+  id="mi-erd"
+  diagram={`erDiagram
   TABLA_A ||--o{ TABLA_B : relacion
-`} />
+`}
+/>
+
+<!-- Diagrama de clases -->
+
+<ClassDiagram
+  id="mi-class"
+  diagram={`classDiagram
+  class Piloto {
+    dni PK
+    nombre
+  }
+  class Escuderia {
+    nombre PK
+  }
+  Piloto "*" --> "1" Escuderia : corre para
+`}
+/>
 ```

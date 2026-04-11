@@ -1,0 +1,24 @@
+---
+import MermaidDiagram from "./MermaidDiagram.astro";
+
+interface Props {
+  diagram: string;
+  id?: string;
+}
+
+const { diagram, id = "class-default" } = Astro.props;
+
+const classStyles = `
+  .classTitle { font-weight: 700; fill: var(--sl-color-white) !important; }
+  .classBox { stroke-width: 1.5px; }
+  g.classGroup text { fill: var(--sl-color-gray-2) !important; font-family: var(--sl-font-mono); font-size: 11px; }
+`;
+---
+
+<MermaidDiagram
+  id={id}
+  diagram={diagram}
+  type="classDiagram"
+  errorLabel="diagrama de clases"
+  diagramStyles={classStyles}
+/>

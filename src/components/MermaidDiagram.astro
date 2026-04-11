@@ -1,0 +1,151 @@
+---
+interface Props {
+  diagram: string;
+  id?: string;
+  type?: "erDiagram" | "classDiagram";
+  errorLabel?: string;
+  diagramStyles?: string;
+}
+
+const {
+  diagram,
+  id = "mermaid-default",
+  type,
+  errorLabel = "diagrama",
+  diagramStyles = "",
+} = Astro.props;
+
+const wrapperId = `mermaid-wrap-${id}`;
+
+const detectType = (src: string): "erDiagram" | "classDiagram" => {
+  const first = src
+    .split("\n")
+    .map((line) => line.trim())
+    .find((line) => line.length > 0)
+    ?.toLowerCase();
+
+  if (first?.startsWith("classdiagram")) return "classDiagram";
+  return "erDiagram";
+};
+
+const resolvedType = type ?? detectType(diagram);
+---
+
+<div class="mermaid-container">
+  <div id={wrapperId} class="mermaid-inner">
+    <p class="mermaid-loading">Cargando diagrama…</p>
+  </div>
+</div>
+
+<script define:vars={{ diagram, wrapperId, resolvedType, errorLabel, diagramStyles }}>
+  (async () => {
+    const wrap = document.getElementById(wrapperId);
+    if (!wrap) return;
+
+    try {
+      const { default: mermaid } = await import(
+        "https://esm.sh/mermaid@11/dist/mermaid.esm.min.mjs"
+      );
+
+      const dark =
+        document.documentElement.getAttribute("data-theme") === "dark";
+
+      const slColor = (name) =>
+        getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: "base",
+        fontFamily: "var(--sl-font-mono)",
+        themeVariables: {
+          darkMode: dark,
+          fontSize: "12px",
+          primaryColor: dark ? "#1b1f24" : "#f6f8fa",
+          primaryBorderColor:
+            slColor("--sl-color-hairline") || (dark ? "#30363d" : "#d0d7de"),
+          primaryTextColor:
+            slColor("--sl-color-white") || (dark ? "#e6edf3" : "#1f2328"),
+          lineColor: slColor("--sl-color-gray-4") || (dark ? "#8b949e" : "#8c959f"),
+          textColor:
+            slColor("--sl-color-white") || (dark ? "#e6edf3" : "#1f2328"),
+          mainBkg: dark ? "#0d1117" : "#ffffff",
+          entityFill: dark ? "#161b22" : "#ffffff",
+          entityBorder:
+            slColor("--sl-color-hairline") || (dark ? "#30363d" : "#d0d7de"),
+          attributeFill: dark ? "#161b22" : "#ffffff",
+          attributeTextColor:
+            slColor("--sl-color-gray-2") || (dark ? "#7d8590" : "#6e7781"),
+        },
+      });
+
+      const uid = `${resolvedType}-svg-${Math.random().toString(36).slice(2)}`;
+      const { svg } = await mermaid.render(uid, diagram);
+      wrap.innerHTML = svg;
+
+      const svgEl = wrap.querySelector("svg");
+      if (!svgEl) return;
+
+      const style = document.createElementNS("http://www.w3.org/2000/svg", "style");
+      style.textContent = `
+        text { pointer-events: none; }
+        ${diagramStyles}
+      `;
+      svgEl.prepend(style);
+
+      svgEl.querySelectorAll("text, tspan").forEach((el) => {
+        if (el.textContent?.trim().includes("PK")) {
+          const accent =
+            getComputedStyle(document.documentElement)
+              .getPropertyValue("--sl-color-text-accent")
+              .trim() || "#3b82f6";
+          el.style.fill = accent;
+          el.style.fontWeight = "700";
+        }
+      });
+
+      wrap
+        .querySelectorAll("svg .node, svg rect.entityBox, svg rect.classBox")
+        .forEach((node) => {
+          const shape =
+            node.tagName === "rect"
+              ? node
+              : node.querySelector("path[d], rect");
+          if (!shape) return;
+          shape.setAttribute("rx", "8");
+          shape.setAttribute("ry", "8");
+        });
+    } catch (e) {
+      console.error("Mermaid error:", e);
+      const msg = e instanceof Error ? e.message : String(e);
+      wrap.innerHTML = `<p class="mermaid-error">No se pudo renderizar el ${errorLabel}.<br><code>${msg}</code></p>`;
+    }
+  })();
+</script>
+
+<style>
+  .mermaid-container {
+    background: var(--sl-color-bg-nav);
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    overflow-x: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .mermaid-loading,
+  .mermaid-error {
+    font-size: 14px;
+    font-family: var(--sl-font-mono);
+    color: var(--sl-color-gray-3);
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .mermaid-inner :global(svg) {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+</style>
